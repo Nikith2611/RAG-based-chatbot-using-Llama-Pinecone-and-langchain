@@ -69,18 +69,20 @@ RAG-based-chatbot-using-Llama2-Pinecone-and-langchain/
 ├── app.py                            # Main Flask application
 ├── requirements.txt                  # Python dependencies
 └── setup.py                          # Project/package setup
+'''
+---
 
-
-⚙️ Installation & Setup
+##⚙️ Installation & Setup
 1️⃣ Clone the Repository
 git clone https://github.com/Nikith2611/RAG-based-chatbot-using-Llama2-Pinecone-and-langchain.git
 cd RAG-based-chatbot-using-Llama2-Pinecone-and-langchain
-2️⃣ Create and Activate a Conda Environment
+##2️⃣ Create and Activate a Conda Environment
 conda create -n mchatbot python=3.8 -y
 conda activate mchatbot
-3️⃣ Install Dependencies
+##3️⃣ Install Dependencies
 pip install -r requirements.txt
-🔐 Environment Variables
+---
+##🔐 Environment Variables
 
 Create a .env file in the project root and add your Pinecone credentials:
 
@@ -89,7 +91,7 @@ PINECONE_API_ENV=your_pinecone_environment
 
 ⚠️ Make sure your .env file is not committed to GitHub.
 
-🧠 Model Setup
+##🧠 Model Setup
 Download the Llama 2 Model
 
 Download the following model file:
