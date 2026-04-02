@@ -4,7 +4,7 @@ How to run?
 STEPS:
 Clone the repository
 
-## Project repo: https://github.com/Nikith2611/RAG-based-chatbot-using-Llama2-Pinecone-and-langchain.git
+## Project repo: git clone https://github.com/Nikith2611/RAG-based-chatbot-using-Llama2-Pinecone-and-langchain.git
 
 # STEP 01- Create a conda environment after opening the repository
 conda create -n mchatbot python=3.8 -y
