@@ -47,7 +47,7 @@ This architecture is commonly used in **enterprise AI assistants**, **document Q
 
 ## 📂 Project Structure
 
-```bash
+```text
 RAG-based-chatbot-using-Llama2-Pinecone-and-langchain/
 │
 ├── Data/
@@ -69,5 +69,117 @@ RAG-based-chatbot-using-Llama2-Pinecone-and-langchain/
 ├── app.py                            # Main Flask application
 ├── requirements.txt                  # Python dependencies
 └── setup.py                          # Project/package setup
+```
 
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/Nikith2611/RAG-based-chatbot-using-Llama2-Pinecone-and-langchain.git
+cd RAG-based-chatbot-using-Llama2-Pinecone-and-langchain
+```
+
+### 2️⃣ Create and Activate a Conda Environment
+
+```bash
+conda create -n mchatbot python=3.8 -y
+conda activate mchatbot
+```
+
+### 3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the project root and add your Pinecone credentials:
+
+```env
+PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_API_ENV=your_pinecone_environment
+```
+
+⚠️ Make sure your `.env` file is not committed to GitHub.
+
+---
+
+## 🧠 Model Setup
+
+### Download the Llama 2 Model
+
+Download the following model file:
+
+```text
+llama-2-7b-chat.ggmlv3.q4_0.bin
+```
+
+**Model Source:**  
+Download it from Hugging Face:  
+**TheBloke / Llama-2-7B-Chat-GGML**
+
+Place the downloaded model file in the location expected by your application.
+
+---
+
+## 📚 Data Source
+
+This project uses the following knowledge source:
+
+```text
+Medical_book.pdf
+```
+
+The PDF is processed, chunked, embedded, and indexed into Pinecone to enable document-based question answering.
+
+---
+
+## 📦 Indexing the Documents
+
+Run the indexing script to process the document and store embeddings in Pinecone:
+
+```bash
+python store_index.py
+```
+
+This step performs the following:
+
+- loads the PDF document
+- splits the content into chunks
+- generates embeddings
+- stores the embeddings in Pinecone for retrieval
+
+Make sure your Pinecone index is configured properly before running this step.
+
+---
+
+## ▶️ Run the Application
+
+Start the Flask application:
+
+```bash
+python app.py
+```
+
+Then open your browser and visit:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 💬 How It Works
+
+- The user asks a question in the chatbot interface
+- The query is converted into embeddings
+- Pinecone retrieves the most relevant document chunks
+- Retrieved context is passed to Llama 2
+- The model generates a grounded response based on the retrieved content
+
+This improves response quality by reducing hallucinations and increasing factual relevance.
 
