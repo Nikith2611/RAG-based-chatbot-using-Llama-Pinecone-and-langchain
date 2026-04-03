@@ -6,5 +6,15 @@ setup(
     author="Nikith Gokul",
     author_email="nikithgokul@gmail.com",
     packages=find_packages(),
-    install_requires=[]
+    install_requires=[
+        "flask",
+        "langchain",
+        "langchain-community",
+        "langchain-pinecone",
+        "langchain-huggingface",
+        "langchain-ollama",
+        "pinecone-client",
+        "sentence-transformers",
+        "python-dotenv"
+    ],
 )

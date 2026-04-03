@@ -20,7 +20,7 @@ def load_pdf(data_path: str):
 
 
 # --- 2. Split documents into smaller text chunks ---
-def text_split(documents, chunk_size=500, chunk_overlap=50):
+def text_split(documents, chunk_size=500, chunk_overlap=100):
     """
     Splits the loaded documents into smaller chunks for embedding.
     

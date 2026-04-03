@@ -1,82 +1,88 @@
 # src/chatbot.py
 
 import os
-from langchain_community.document_loaders import PyPDFDirectoryLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_pinecone import PineconeVectorStore
-from langchain_ollama import OllamaLLM
-from langchain.chains import RetrievalQA
 from dotenv import load_dotenv
 
+from langchain_pinecone import PineconeVectorStore
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaLLM
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
+
+# ----------------------------
+# 0. Load ENV (optional)
+# ----------------------------
 load_dotenv()
 
-PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
-PINECONE_ENV = os.environ.get("PINECONE_API_ENV")
-INDEX_NAME = os.environ.get("PINECONE_INDEX", "chatbot")  # default to "chatbot"
+# ----------------------------
+# 1. Config (Use ENV or fallback)
+# ----------------------------
+# ----------------------------
+# CONFIG
+# ----------------------------
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+INDEX_NAME = os.getenv("PINECONE_INDEX", "chatbot")
+
+# Safety check
+if not PINECONE_API_KEY:
+    raise ValueError("❌ PINECONE_API_KEY not found in .env")
+
+os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
+# ----------------------------
+# 2. Embeddings
+# ----------------------------
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 
 # ----------------------------
-# 1. Initialize Embeddings
-# ----------------------------
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-# ----------------------------
-# 2. Pinecone Vector Store Setup
+# 3. Connect to Pinecone
 # ----------------------------
 def init_pinecone():
-    import pinecone
-    pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
-    return PineconeVectorStore.from_existing_index(index_name=INDEX_NAME, embedding=embeddings)
-
-# ----------------------------
-# 3. Load and Split PDFs
-# ----------------------------
-def load_and_split_pdfs(pdf_folder: str, chunk_size=500, chunk_overlap=50):
-    loader = PyPDFDirectoryLoader(pdf_folder)
-    documents = loader.load()
-    
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap
-    )
-    text_chunks = text_splitter.split_documents(documents)
-    return text_chunks
-
-# ----------------------------
-# 4. Upload PDFs to Pinecone
-# ----------------------------
-def upload_to_pinecone(pdf_folder: str):
-    from langchain_pinecone import PineconeVectorStore
-    import pinecone
-
-    pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
-    text_chunks = load_and_split_pdfs(pdf_folder)
-    texts = [doc.page_content for doc in text_chunks]
-    metadatas = [doc.metadata for doc in text_chunks]
-
-    store = PineconeVectorStore.from_texts(
-        texts=texts,
-        metadatas=metadatas,
-        embedding=embeddings,
+    docsearch = PineconeVectorStore.from_existing_index(
         index_name=INDEX_NAME,
-        pinecone_api_key=PINECONE_API_KEY
+        embedding=embeddings
     )
-    return store
+    return docsearch
 
 # ----------------------------
-# 5. Initialize RAG QA Chain
+# 4. Prompt Template
 # ----------------------------
-def get_qa_chain(k=3):
-    # Load the vector store
+def get_prompt():
+    template = """
+    You are a helpful and polite medical assistant. 
+
+    CORE INSTRUCTIONS:
+    1. GREETINGS: If the user greets you (e.g., "Hi", "Hello", "Good morning"), respond warmly with a greeting and ask how you can assist them today.
+    2. GRATITUDE: If the user thanks you or says they found what they needed, respond politely (e.g., "I'm happy I could help! Please come back if you need further assistance.")
+    3. MEDICAL QUERIES: For medical questions, use the provided Context below. 
+    4. ACCURACY: If the answer isn't explicitly in the Context, summarize the relevant parts but mention the textbook focuses on those specific areas. 
+    5. LIMITATIONS: If the question is completely unrelated to the Context or general medical knowledge, politely state your focus.
+
+    Context: {context}
+
+    Question: {question}
+
+    Helpful Answer:
+    """
+    return PromptTemplate(
+        template=template,
+        input_variables=["context", "question"]
+    )
+# ----------------------------
+# 5. RAG QA Chain
+# ----------------------------
+def get_qa_chain(k=5):
     docsearch = init_pinecone()
-    
-    # Load LLM
+
     llm = OllamaLLM(model="llama3.2")
-    
-    # RetrievalQA chain
+
     qa = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",
-        retriever=docsearch.as_retriever(search_kwargs={"k": k})
+        retriever=docsearch.as_retriever(search_kwargs={"k": k}),
+        return_source_documents=True,
+        chain_type_kwargs={"prompt": get_prompt()}
     )
+
     return qa
