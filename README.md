@@ -21,7 +21,7 @@ This project implements a **RAG (Retrieval-Augmented Generation)** pipeline wher
 - source documents are processed and embedded
 - embeddings are stored in **Pinecone**
 - relevant chunks are retrieved based on user queries
-- retrieved context is passed to **Llama 2**
+- retrieved context is passed to **Llama 3.2**
 - the chatbot generates context-aware responses
 
 This architecture is commonly used in **enterprise AI assistants**, **document Q&A systems**, and **knowledge retrieval applications**.
@@ -30,10 +30,10 @@ This architecture is commonly used in **enterprise AI assistants**, **document Q
 
 ## 🛠️ Tech Stack
 
-- **Python**
+- **Python 3.8.10**
 - **LangChain**
 - **Flask**
-- **Meta Llama 2**
+- **Meta Llama 3.2**
 - **Pinecone**
 - **Sentence Transformers / Embeddings**
 - **Vector Database**
@@ -47,7 +47,7 @@ This architecture is commonly used in **enterprise AI assistants**, **document Q
 - Semantic search using **Pinecone**
 - Context-aware chatbot responses
 - Modular project structure
-- Local LLM inference using **Llama 2**
+- Local LLM inference using **Llama 3.2**
 - Flask-based chatbot UI
 - Reusable prompt and helper utilities
 
@@ -84,15 +84,18 @@ RAG-based-chatbot-using-Llama2-Pinecone-and-langchain/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/Nikith2611/RAG-based-chatbot-using-Llama2-Pinecone-and-langchain.git
+git clone https://github.com/Nikith2611/RAG-based-chatbot-using-Llama-Pinecone-and-langchain.git
 cd RAG-based-chatbot-using-Llama2-Pinecone-and-langchain
 ```
 
-### 2️⃣ Create and Activate a Conda Environment
+### 2️⃣ Create and Activate a virtual environment
 
 ```bash
-conda create -n mchatbot python=3.8 -y
-conda activate mchatbot
+# Create the virtual environment
+python -m venv m_chatbot
+
+# Activate it (Windows)
+m_chatbot\Scripts\activate
 ```
 
 ### 3️⃣ Install Dependencies
@@ -127,10 +130,9 @@ llama-2-7b-chat.ggmlv3.q4_0.bin
 ```
 
 **Model Source:**  
-Download it from Hugging Face:  
-**TheBloke / Llama-2-7B-Chat-GGML**
-
-Place the downloaded model file in the location expected by your application.
+Download it from :  
+**[TheBloke / Llama-2-7B-Chat-GGML](https://ollama.com/library/llama3.2)**
+pull the llama 3.2 using ------>  ollama pull llama3.2
 
 ---
 
