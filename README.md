@@ -4,6 +4,14 @@ A Retrieval-Augmented Generation (RAG) chatbot built using **LangChain**, **Meta
 
 This project demonstrates how to build a **document-based AI assistant** that retrieves relevant information from a knowledge source and generates grounded responses using a large language model.
 
+![WhatsApp Image 2026-04-04 at 01 30 38](https://github.com/user-attachments/assets/77eef08f-89cf-4dab-989a-4b5a63da0a63)
+
+![WhatsApp Image 2026-04-04 at 01 33 35](https://github.com/user-attachments/assets/6c267d3d-0634-4bcf-8bee-b4e4c34cc813)
+
+![WhatsApp Image 2026-04-04 at 01 47 09](https://github.com/user-attachments/assets/dfc75ad0-57f6-46d0-a36d-df88d3ac37cb)
+
+
+
 ---
 
 ## 🚀 Overview
