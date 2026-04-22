@@ -1,4 +1,4 @@
-# RAG Chatbot using Llama 2, Pinecone, and LangChain
+# RAG Chatbot using Llama 3.2, Pinecone, and LangChain
 
 A Retrieval-Augmented Generation (RAG) chatbot built using **LangChain**, **Llama 3.2**, and **Pinecone** for semantic document retrieval and context-aware question answering.
 
@@ -124,10 +124,6 @@ PINECONE_API_ENV=your_pinecone_environment
 ### Download the Llama 2 Model
 
 Download the following model file:
-
-```text
-llama-2-7b-chat.ggmlv3.q4_0.bin
-```
 
 **Model Source:**  
 Download it from :  
